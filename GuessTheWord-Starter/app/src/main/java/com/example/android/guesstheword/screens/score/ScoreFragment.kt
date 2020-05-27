@@ -54,10 +54,8 @@ class ScoreFragment : Fragment() {
         //GameFragment에서 ScoreFragment로 navigate할 때, 생성한 번들 가져오기
         viewModelFactory = ScoreViewModelFactory(ScoreFragmentArgs.fromBundle(arguments!!).score)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ScoreViewModel::class.java)
-
-        viewModel.score.observe(this, Observer { newScore ->
-            binding.scoreText.text = newScore.toString()
-        })
+        binding.scoreViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.eventPlayAgain.observe(this, Observer { playAgain ->
             if(playAgain){
@@ -65,10 +63,6 @@ class ScoreFragment : Fragment() {
                 viewModel.onPlayAgainComplete()
             }
         })
-
-        binding.playAgainButton.setOnClickListener{
-            viewModel.onPlayAgain()
-        }
 
         return binding.root
     }
